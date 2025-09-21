@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from 'react';
 
 // Player型からnameを削除
