@@ -14,7 +14,9 @@ const RankingSection = () => {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await fetch('https://tawara-no-mai-ranking.onrender.com/get_ranking');
+        // 環境変数からAPIのURLを取得。なければローカルのURLを使う
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+        const response = await fetch(`${apiUrl}/get_ranking`);
         if (!response.ok) {
           throw new Error('サーバーからの応答がありませんでした。');
         }
