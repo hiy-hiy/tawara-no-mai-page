@@ -15,7 +15,7 @@ const RankingSection = () => {
     const fetchRanking = async () => {
       try {
         // 環境変数からAPIのURLを取得。なければローカルのURLを使う
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
         const response = await fetch(`${apiUrl}/get_ranking`);
         if (!response.ok) {
           throw new Error('サーバーからの応答がありませんでした。');
