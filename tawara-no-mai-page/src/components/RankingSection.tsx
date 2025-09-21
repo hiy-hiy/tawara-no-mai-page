@@ -1,31 +1,59 @@
+import { useState, useEffect } from 'react';
+
+// Player型からnameを削除
+type ScoreEntry = {
+  rank: number;
+  score: number;
+};
+
 const RankingSection = () => {
-  // 後でFirebaseから取得するダミーデータ
-  const dummyRanking = [
-    { rank: 1, name: "TGS_PLAYER_01", score: 999990 },
-    { rank: 2, name: "GEMINI_DEV", score: 985240 },
-    { rank: 3, name: "HIKARU_N", score: 852360 },
-    { rank: 4, name: "AI_CHALLENGER", score: 789120 },
-    { rank: 5, name: "TOKYO_GAMER", score: 654320 },
-  ];
+  const [ranking, setRanking] = useState<ScoreEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRanking = async () => {
+      try {
+        const response = await fetch('https://tawara-no-mai-ranking.onrender.com/get_ranking');
+        if (!response.ok) {
+          throw new Error('サーバーからの応答がありませんでした。');
+        }
+        const data = await response.json();
+        setRanking(data);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('予期せぬエラーが発生しました。');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRanking();
+  }, []);
+
+  if (loading) return <p className="text-center text-white py-10">ランキングを読み込み中...</p>;
+  if (error) return <p className="text-center text-red-500 py-10">エラー: {error}</p>;
 
   return (
     <section id="ranking" className="py-20">
       <h3 className="text-4xl font-bold text-center mb-4 font-display">HIGH SCORE RANKING</h3>
       <p className="text-center text-gray-400 mb-8">神様のお恵みはスコアとなって</p>
-      <div className="max-w-2xl mx-auto bg-black bg-opacity-50 p-6 rounded-lg">
-        <div className="grid grid-cols-3 text-lg font-bold border-b border-gray-600 pb-2 mb-4">
+      <div className="max-w-md mx-auto bg-black bg-opacity-50 p-6 rounded-lg"> {/* 横幅をmdに変更 */}
+        {/* grid-cols-2に変更し、NAMEを削除 */}
+        <div className="grid grid-cols-2 text-lg font-bold border-b border-gray-600 pb-2 mb-4">
           <span>RANK</span>
-          <span>NAME</span>
           <span className="text-right">SCORE</span>
         </div>
         <ul className="space-y-3">
-          {dummyRanking.map((player) => (
-            <li key={player.rank} className="grid grid-cols-3 text-xl items-center">
+          {ranking.map((entry) => (
+            // grid-cols-2に変更し、NAMEを削除
+            <li key={entry.rank} className="grid grid-cols-2 text-xl items-center">
               <span className="font-display font-bold text-2xl">
-                {player.rank}
+                {entry.rank}
               </span>
-              <span>{player.name}</span>
-              <span className="text-right font-mono">{player.score.toLocaleString()}</span>
+              <span className="text-right font-mono">{entry.score.toLocaleString()}</span>
             </li>
           ))}
         </ul>
@@ -33,4 +61,5 @@ const RankingSection = () => {
     </section>
   );
 };
+
 export default RankingSection;
