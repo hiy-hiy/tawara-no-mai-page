@@ -17,8 +17,8 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "【あなたのゲームタイトル】",
-  description: "【あなたのゲームの概要】",
+  title: "たわらの舞｜ホームページ",
+  description: "東京ゲームショウに出展された、たわらがインターフェースのゲームです。",
 };
 
 export default function RootLayout({
