@@ -38,11 +38,11 @@ export default function Home() {
       <main>
         <HeroSection />
         <AboutSection />
-        <MediaSection />
+        {/*<MediaSection />*/}
         <SystemSection />
         <RankingSection />
         <TeamSection />
-        <ContactSection />
+        {/*<ContactSection />*/}
       </main>
     </div>
   );
